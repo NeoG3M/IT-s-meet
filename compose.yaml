@@ -7,12 +7,51 @@
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
+
+
 services:
   server:
     build:
       context: .
     ports:
       - 8000:8000
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+ postgres_data:
+
+
+# services:
+#   postgres:
+#     image: postgres:18
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: secret
+#       POSTGRES_DB: demo
+
+#   pgadmin:
+#     image: dpage/pgadmin4:9.8
+#     ports:
+#       - 5050:80
+#     environment:
+#       # Required by pgAdmin
+#       PGADMIN_DEFAULT_EMAIL: demo@example.com
+#       PGADMIN_DEFAULT_PASSWORD: secret
+
+#       # Don't require the user to login
+#       PGADMIN_CONFIG_SERVER_MODE: 'False'
+
+#       # Don't require a "master" password after logging in
+#       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to

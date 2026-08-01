@@ -2,3 +2,4 @@
 /.idea
 ./backend/database.ini
 backend/database.ini
+.env
