@@ -1,5 +1,6 @@
-/.venv
-/.idea
-./backend/database.ini
+*.venv
+*.idea
+/./backend/database.ini
 backend/database.ini
-.env
+*.env
+*__pycache__
