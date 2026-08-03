@@ -15,5 +15,6 @@ class Group(Base):
     faculty_id: Mapped[int] = mapped_column(ForeignKey("faculties.id"), primary_key=True)
     course: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    users = relationship("Users", back_populates="Group")
+    users = relationship("User", back_populates="group")
     faculty = relationship("Faculty")
+    posts_request = relationship('PostRequest', back_populates='to_group')

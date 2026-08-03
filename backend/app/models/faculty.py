@@ -11,5 +11,6 @@ class Faculty(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
 
-    users = relationship("User", back_populates="Faculty")
-    groups = relationship('Group', back_populates='Faculty')
+    users = relationship("User", back_populates="faculty")
+    groups = relationship('Group', back_populates='faculty')
+    posts_request = relationship('PostRequest', back_populates='to_faculty')
