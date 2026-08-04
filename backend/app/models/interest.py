@@ -1,7 +1,7 @@
-from sqlalchemy import Integer, String, DateTime, func, ForeignKey
+from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from ..database import Base
+from ..database_base import Base
 
 class Interest(Base):
     __tablename__ = 'interests'

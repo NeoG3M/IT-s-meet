@@ -1,8 +1,7 @@
-from sqlalchemy import Integer, String, DateTime, func, ForeignKey
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from ..database import Base
+from ..database_base import Base
 
 
 class Faculty(Base):
@@ -13,4 +12,4 @@ class Faculty(Base):
 
     users = relationship("User", back_populates="faculty")
     groups = relationship('Group', back_populates='faculty')
-    posts_request = relationship('PostRequest', back_populates='to_faculty')
+    posts = relationship('Post', back_populates='to_faculty')
