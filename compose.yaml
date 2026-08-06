@@ -10,11 +10,22 @@
 
 
 services:
-  server:
+  api:
     build:
       context: .
+    container_name: it-s-meet-api
+    restart: unless-stopped
+    volumes:
+      - .:/backend/app
     ports:
       - 8000:8000
+    depends_on:
+      - postgres
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]  # Замени на свой эндпоинт проверки
+      interval: 10s
+      timeout: 5s
+      retries: 5
   postgres:
     image: postgres:17
     container_name: postgres

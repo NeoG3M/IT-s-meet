@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Integer, String, DateTime, func, ForeignKey, Column, Table
+from sqlalchemy import Integer, String, DateTime, func, ForeignKey, Column, Table, Boolean, text
 from sqlalchemy.dialects.postgresql import TEXT
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -29,12 +29,14 @@ class Post(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     active_till: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text('true'))
     description: Mapped[str] = mapped_column(TEXT, nullable=False)
     
     importance: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     to_faculty_id: Mapped[int] = mapped_column(ForeignKey("faculties.id"), nullable=True)
     to_course: Mapped[int] = mapped_column(Integer, nullable=True)
     to_group_id: Mapped[int] = mapped_column(ForeignKey('groups.id'), nullable=True)
+    privacy: Mapped['PostrPrivacySettings'] = relationship('PostPrivacySettings')
 
     categories: Mapped[list['Category']] = relationship(secondary=post_categories, back_populates='posts')
     requested_skills: Mapped[list['Skill']] = relationship(secondary='post_skills', back_populates='posts')

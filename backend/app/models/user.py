@@ -18,6 +18,7 @@ class User(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     fullname: Mapped[str] = mapped_column(String(100), nullable=False)
+    tg_id: Mapped[int] = mapped_column(Integer, nullable=False)
     tg_username: Mapped[str] = mapped_column(String(64), nullable=False)
     contacts: Mapped[dict[str, any]] = mapped_column(JSONB, nullable=False, default=dict)
     faculty_id: Mapped[int] = mapped_column(ForeignKey("faculties.id"), nullable=False)
@@ -25,6 +26,7 @@ class User(Base):
     group_id: Mapped[int] = mapped_column(ForeignKey("groups.id"), nullable=False)
     bio: Mapped[str] = mapped_column(TEXT, nullable=False, default="")
     signed_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
+    privacy: Mapped['UserPrivacySettings'] = relationship('UserPrivacySettings')
 
     user_skills: Mapped[list["UserSkill"]] = relationship(secondary="user_skills", back_populates="users")
     interests: Mapped[list["Interest"]] = relationship(secondary=user_interests, back_populates="users")
@@ -33,4 +35,3 @@ class User(Base):
 
     faculty = relationship("Faculty")
     group = relationship("Group")
-
