@@ -36,7 +36,7 @@ class Post(Base):
     to_faculty_id: Mapped[int] = mapped_column(ForeignKey("faculties.id"), nullable=True)
     to_course: Mapped[int] = mapped_column(Integer, nullable=True)
     to_group_id: Mapped[int] = mapped_column(ForeignKey('groups.id'), nullable=True)
-    privacy: Mapped['PostrPrivacySettings'] = relationship('PostPrivacySettings')
+    privacy: Mapped['PostrPrivacySettings'] = relationship('PostPrivacySettings', uselist=False, cascade="all, delete-orphan", back_populates='post')
 
     categories: Mapped[list['Category']] = relationship(secondary=post_categories, back_populates='posts')
     requested_skills: Mapped[list['Skill']] = relationship(secondary='post_skills', back_populates='posts')

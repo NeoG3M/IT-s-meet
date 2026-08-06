@@ -8,3 +8,4 @@ from .post_skills import PostSkill
 from .user import User, user_interests
 from .user_skills import UserSkill
 from .skill import Skill
+from .privacy import PostPrivacySettings, UserPrivacySettings

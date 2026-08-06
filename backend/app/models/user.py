@@ -26,7 +26,7 @@ class User(Base):
     group_id: Mapped[int] = mapped_column(ForeignKey("groups.id"), nullable=False)
     bio: Mapped[str] = mapped_column(TEXT, nullable=False, default="")
     signed_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
-    privacy: Mapped['UserPrivacySettings'] = relationship('UserPrivacySettings')
+    privacy: Mapped['UserPrivacySettings'] = relationship('UserPrivacySettings', uselist=False, cascade="all, delete-orphan", back_populates='user')
 
     user_skills: Mapped[list["UserSkill"]] = relationship(secondary="user_skills", back_populates="users")
     interests: Mapped[list["Interest"]] = relationship(secondary=user_interests, back_populates="users")
