@@ -1,14 +1,17 @@
 from typing import List
 
+from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import SessionDep
+from app.database import SessionDep, get_session
 from app.repository.auth import CurrentUser
 from app.models import User, UserPrivacySettings
 from app.schemas import UserShort
 
-async def get_short_users(current_user: CurrentUser, session: SessionDep, faculty: int | None = None, course: int | None = None):
+async def get_short_users(current_user: CurrentUser, session: AsyncSession, faculty: int | None = None, course: int | None = None):
+
     query = select(User).outerjoin(UserPrivacySettings)
     # clearing empty users that just added
     query = query.where(User.fullname != "")
@@ -42,9 +45,21 @@ async def get_short_users(current_user: CurrentUser, session: SessionDep, facult
     return [UserShort(**u) for u in filtered]
     
 
-async def create_user(user: User, session: SessionDep):
+async def create_user(user: User, session: AsyncSession):
     session.add(user)
+    await session.flush()
     await session.commit()
     await session.refresh(user)
 
     return user
+
+
+async def get_one_user(user_id: int, session: AsyncSession):
+    query = select(User).where(User.id == user_id)
+    user = await session.execute(query)
+    user = user.scalars().one()
+
+    if not user:
+        raise HTTPException(status_code=404, detail='User with id {user_id} was not found!')
+    
+

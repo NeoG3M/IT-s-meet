@@ -14,7 +14,7 @@ class PostResponse(Base):
     post_id: Mapped[int] = mapped_column(ForeignKey('posts.id'), nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    message: Mapped[str] = mapped_column(String(128), nullable=False)
+    message: Mapped[str] = mapped_column(String(128), nullable=False, default='')
 
     is_watched: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_accepted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)

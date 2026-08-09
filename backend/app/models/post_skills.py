@@ -12,5 +12,5 @@ class PostSkill(Base):
     level: Mapped[str] = mapped_column(String(32), nullable=True)
     experience: Mapped[int] = mapped_column(Integer, nullable=True)
 
-    post: Mapped['Post'] = relationship('Post')
-    skill: Mapped['Skill'] = relationship('Skill')
+    post: Mapped['Post'] = relationship('Post', back_populates='requested_skills')
+    skill: Mapped['Skill'] = relationship('Skill', back_populates='post_skills')

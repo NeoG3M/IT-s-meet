@@ -11,7 +11,7 @@ from app.schemas.privacy import UserPrivacySettings
 class UserContacts(BaseModel):
     vk: str | None = None
     github: str | None = None
-    email: EmailStr | None = None
+    # email: EmailStr | None = None
     phone: str | None = None
 
     model_config = ConfigDict(from_attributes=True)

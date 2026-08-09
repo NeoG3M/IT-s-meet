@@ -16,7 +16,9 @@ services:
     container_name: it-s-meet-api
     restart: unless-stopped
     volumes:
-      - .:/backend/app
+      - ./backend:/backend
+    env_file:
+      - .env
     ports:
       - 8000:8000
     depends_on:

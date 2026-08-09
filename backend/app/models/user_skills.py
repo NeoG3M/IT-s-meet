@@ -12,5 +12,5 @@ class UserSkill(Base):
     level: Mapped[str] = mapped_column(String(32), nullable=True)
     experience: Mapped[int] = mapped_column(Integer, nullable=True)
 
-    user = relationship('User')
-    skill = relationship('Skill')
+    user = relationship('User', back_populates='user_skills')
+    skill = relationship('Skill', back_populates='user_skills')

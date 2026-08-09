@@ -10,5 +10,6 @@ class Interest(Base):
     name: Mapped[str] = mapped_column(String(50), nullable=False)
 
     users: Mapped[list['User']] = relationship(secondary='user_interests', back_populates='interests')
+    posts: Mapped[list['Post']] = relationship(secondary='post_interests', back_populates='requested_interests')
 
     

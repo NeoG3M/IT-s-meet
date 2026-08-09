@@ -30,7 +30,7 @@ class Post(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     active_till: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text('true'))
-    description: Mapped[str] = mapped_column(TEXT, nullable=False)
+    description: Mapped[str] = mapped_column(TEXT, nullable=False, default="")
     
     importance: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     to_faculty_id: Mapped[int] = mapped_column(ForeignKey("faculties.id"), nullable=True)
@@ -38,12 +38,12 @@ class Post(Base):
     to_group_id: Mapped[int] = mapped_column(ForeignKey('groups.id'), nullable=True)
     privacy: Mapped['PostrPrivacySettings'] = relationship('PostPrivacySettings', uselist=False, cascade="all, delete-orphan", back_populates='post')
 
-    categories: Mapped[list['Category']] = relationship(secondary=post_categories, back_populates='posts')
-    requested_skills: Mapped[list['Skill']] = relationship(secondary='post_skills', back_populates='posts')
-    requested_interests: Mapped[list['Interest']] = relationship(secondary=post_interests, back_populates='posts')
+    categories: Mapped[list['Category']] = relationship(secondary=post_categories, back_populates='posts', cascade="all")
+    requested_skills: Mapped[list['PostSkill']] = relationship('PostSkill', back_populates='post', cascade="all")
+    requested_interests: Mapped[list['Interest']] = relationship(secondary=post_interests, back_populates='posts', cascade="all")
 
     responses: Mapped[list['PostResponse']] = relationship('PostResponse', back_populates='post')
-    responses_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    responses_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default=text("0"))
     
     user: Mapped['User'] = relationship("User", back_populates="posts")
     to_faculty: Mapped['Faculty'] = relationship('Faculty')

@@ -10,4 +10,5 @@ class Skill(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(50), nullable=False)
 
-    users: Mapped[list['User']] = relationship(secondary='user_skills', back_populates='skills')
+    user_skills: Mapped[list['UserSkill']] = relationship('UserSkill', back_populates='skill', cascade="all")
+    post_skills: Mapped[list['PostSkill']] = relationship('PostSkill', back_populates='skill', cascade="all")

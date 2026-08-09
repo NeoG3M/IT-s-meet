@@ -8,7 +8,7 @@ from app.schemas.skill import SkillShort
 from app.schemas.interest import InterestInfo
 from app.schemas.faculty import FacultyInfo
 from app.schemas.group import GroupShort
-from backend.app.schemas.post_response import PostResponse
+from app.schemas.post_response import PostResponse
 
 class PostShort(BaseModel):
     id: int
@@ -19,7 +19,7 @@ class PostShort(BaseModel):
     categories: list[PostCategoryInfo]
     skills: list[SkillShort]
     interests: list[InterestInfo]
-    responses_count: int = Field(..., ge=0, default=0)
+    responses_count: int = Field(ge=0, default=0)
 
     @field_validator('importance')
     def validate_importance(importance: int):
