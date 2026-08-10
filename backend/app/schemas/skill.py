@@ -5,5 +5,5 @@ class SkillShort(BaseModel):
     name: str = Field(max_length=50, min_length=1)
 
 class UserSkillInfo(SkillShort):
-    level: str = Field(max_length=32, min_length=1)
-    experience: int = Field(ge=1)
+    level: str | None = Field(max_length=32, min_length=1)
+    experience: int | None = Field(ge=1)

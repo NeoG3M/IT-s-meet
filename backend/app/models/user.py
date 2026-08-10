@@ -33,5 +33,5 @@ class User(Base):
     responses: Mapped[list["PostResponse"]] = relationship("PostResponse", back_populates="user")
     posts: Mapped[list["Post"]] = relationship("Post", back_populates="user")
 
-    faculty = relationship("Faculty")
-    group = relationship("Group")
+    faculty: Mapped['Faculty'] = relationship("Faculty")
+    group: Mapped['Group'] = relationship("Group")

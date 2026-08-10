@@ -11,10 +11,10 @@ class UserPrivacySettings(Base):
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
     to_everyone: Mapped[bool] = mapped_column(
-    Boolean,
-    default=False,
-    server_default=text("false"),
-    nullable=False
+        Boolean,
+        default=False,
+        server_default=text("false"),
+        nullable=False
     )   
 
     to_faculty: Mapped[bool] = mapped_column(

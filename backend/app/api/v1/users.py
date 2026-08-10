@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Response, HTTPException
 from app.schemas import UserShort, CreateUser, UserFull
 from app.repository.auth import CurrentUser
 from app.repository.users import get_short_users
-from app.service import user_creation
+from app.service import user_creation, giving_one_user
 from app.database import SessionDep
 
 router = APIRouter()
@@ -23,6 +23,14 @@ async def create_user(user_data: CreateUser, session: SessionDep):
     }
     raise HTTPException(status_code=500, detail='Something went wrong while creating user.')
 
-# @router.get('/users/{user_id}', response_model=UserFull)
-# def get_user_by_id(user_id: int, current_use: CurrentUser):
-#     user = await 
+@router.get('/users/{user_id}', response_model=UserFull)
+async def get_user_by_id(user_id: int, current_user: CurrentUser, session: SessionDep):
+    # This function can raise HTTPError in case if requested user's privacy doesn't allow current user to show information.
+    # That means that frontend must handle this by parsing information by itself
+    # But... maybe someday i will change that. For example, when i get to that specific part
+    user_info = await giving_one_user(user_id=user_id, current_user=current_user, session=session)
+    return user_info
+
+
+# TODO: patch for: /users/{id}; /users/{id}/skills; /users/{id}/interests
+# @router.patch()
