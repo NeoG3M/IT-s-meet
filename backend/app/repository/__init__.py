@@ -1,1 +1,1 @@
-from .users import create_user, get_short_users, get_one_user
+from .users import create_user, get_short_users, get_one_user, patch_user

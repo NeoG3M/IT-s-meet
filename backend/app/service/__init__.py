@@ -1,1 +1,1 @@
-from .users import user_creation, chech_if_can_show, giving_one_user
+from .users import user_creation, check_if_can_show, giving_one_user, try_patch_user, giving_all_users_short

@@ -1,16 +1,15 @@
 from fastapi import APIRouter, Depends, Response, HTTPException
 
-from app.schemas import UserShort, CreateUser, UserFull
+from app.schemas import UserShort, CreateUser, UserFull, UpdateUser
 from app.repository.auth import CurrentUser
-from app.repository.users import get_short_users
-from app.service import user_creation, giving_one_user
+from app.service.users import user_creation, giving_one_user, try_patch_user, giving_all_users_short
 from app.database import SessionDep
 
 router = APIRouter()
 
 @router.get('/users', response_model=list[UserShort])
 async def get_all_users(current_user: CurrentUser, session: SessionDep, faculty: int | None = None, course: int | None = None):
-    users: list[UserShort] = await get_short_users(current_user=current_user, faculty=faculty, course=course, session=session)
+    users: list[UserShort] = await giving_all_users_short(current_user=current_user, faculty=faculty, course=course, session=session)
     return users
 
 @router.post('/users', status_code=201)
@@ -33,4 +32,9 @@ async def get_user_by_id(user_id: int, current_user: CurrentUser, session: Sessi
 
 
 # TODO: patch for: /users/{id}; /users/{id}/skills; /users/{id}/interests
-# @router.patch()
+@router.patch("/users/{user_id}", response_model=UserFull)
+async def patch_one_user(new_user_info: UpdateUser, user_id: int, session: SessionDep, current_user: CurrentUser):
+    data = new_user_info.model_dump(exclude_unset=True)
+    print(data)
+    # resp = await try_patch_user(user_id=user_id, session=session, current_user=current_user, new_user_info=data)
+    return Response(status_code=200)

@@ -1,35 +1,25 @@
-from typing import List
-
 from fastapi import HTTPException
 from sqlalchemy import select
-from sqlalchemy.orm import joinedload, selectinload
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import SessionDep, get_session
 from app.repository.auth import CurrentUser
 from app.models import User, UserPrivacySettings, UserSkill
-from app.schemas import UserShort
-from app.service import check_if_can_show
+from app.schemas import UserShort, UpdateUser
 
 async def get_short_users(current_user: CurrentUser, session: AsyncSession, faculty: int | None = None, course: int | None = None) -> list[UserShort]:
-
     query = select(User).outerjoin(UserPrivacySettings)
-    # clearing empty users that just added
+    # clearing empty users that just added and not finished
     query = query.where(User.fullname != "")
     if faculty is not None:
         query = query.where(User.faculty_id == faculty)
     if course is not None:
             query = query.where(User.course == course)
 
-    candidates = await session.execute(query)
-    candidates = candidates.scalars().all()
+    users = await session.execute(query)
+    users = users.scalars().all()
 
-    filtered: List[User] = []
-    for u in candidates:
-        if check_if_can_show(u, current_user):
-            filtered.append(u)
-
-    return [UserShort(**u) for u in filtered]
+    return users
     
 
 async def create_user(user: User, session: AsyncSession) -> User:
@@ -60,3 +50,13 @@ async def get_one_user(user_id: int, session: AsyncSession) -> User:
         raise HTTPException(status_code=404, detail='User with id {user_id} was not found!')
     return user
 
+
+async def patch_user(patched_user: int, new_user_info: dict, session: AsyncSession):
+    for field, value in new_user_info.items():
+         setattr(patched_user, field, value)
+
+    await session.commit()
+    await session.refresh(patched_user)
+
+    return patch_user
+    

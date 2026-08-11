@@ -38,15 +38,12 @@ class CreateUser(BaseModel):
     tg_username: str = Field(max_length=64, min_length=3)
 
 class UpdateUser(BaseModel):
-    fullname: str | None = Field(max_length=100, min_length=5)
-    tg_username: str | None = Field(max_length=64, min_length=3)
-    id: int
-    bio: str | None
-    contacts: UserContacts | None
-    interests: list[InterestInfo] | None
-    skills: list[UserSkillInfo] | None
-    faculty_id: int | None
-    group_id: int | None
-    course: int | None
-    tg_username: str | None = Field(max_length=64, min_length=3)
-    privacy: UserPrivacySettings | None
+    fullname: str | None = Field(max_length=100, min_length=5, default=None)
+    tg_username: str | None = Field(max_length=64, min_length=3, default=None)
+    tg_id: int | None = None
+    bio: str | None = None
+    contacts: UserContacts | None = None
+    faculty_id: int | None = None
+    group_id: int | None = None
+    course: int | None = None
+    privacy: UserPrivacySettings | None = None
