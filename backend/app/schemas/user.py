@@ -18,7 +18,7 @@ class UserContacts(BaseModel):
 
 class UserShort(BaseModel):
     id: int
-    fullname: str = Field(..., max_length=100, min_length=5)
+    fullname: str = Field(max_length=100, default='Not defined')
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -28,9 +28,9 @@ class UserFull(UserShort):
     contacts: UserContacts
     interests: list[InterestInfo] | None
     skills: list[UserSkillInfo] | None
-    faculty: FacultyInfo
+    faculty: FacultyInfo | None
     course: int
-    group: GroupShort
+    group: GroupShort | None
     signed_at: datetime
 
 class CreateUser(BaseModel):

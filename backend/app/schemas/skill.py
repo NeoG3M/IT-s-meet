@@ -7,3 +7,8 @@ class SkillShort(BaseModel):
 class UserSkillInfo(SkillShort):
     level: str | None = Field(max_length=32, min_length=1)
     experience: int | None = Field(ge=1)
+
+class UpdateUserSkill(BaseModel):
+    id: int
+    level: str | None = Field(max_length=32)
+    experience: int | None = Field(ge=1)

@@ -6,4 +6,4 @@ from .user import UserPrivacySettings, UserShort, UserContacts, UserFull, UserSk
 from .interest import InterestInfo
 from .post import PostCategoryInfo, PostFull, PostResponse, PostShort
 from .post_response import PostResponse
-from .skill import SkillShort, UserSkillInfo
+from .skill import SkillShort, UserSkillInfo, UpdateUserSkill
