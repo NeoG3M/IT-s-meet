@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Response, HTTPException
 
-from app.schemas import UserShort, CreateUser, UserFull, UpdateUser, UserSkillInfo, UpdateUserSkill
+from app.schemas import UserShort, CreateUser, UserFull, UpdateUser, UserSkillInfo, UpdateUserSkill, InterestInfo
 from app.repository.auth import CurrentUser
 from app.service.users import user_creation, giving_one_user, try_patch_user, giving_all_users_short, try_patch_user_skills
 from app.database import SessionDep
@@ -37,7 +37,14 @@ async def patch_one_user(new_user_info: UpdateUser, user_id: int, session: Sessi
     resp = await try_patch_user(user_id=user_id, session=session, current_user=current_user, new_user_info=new_user_info)
     return resp
 
-@router.patch('/users/{user_id}/skills', response_model=list[UserSkillInfo])
+@router.put('/users/{user_id}/skills', response_model=list[UserSkillInfo])
 async def patch_user_skills(new_user_skills: list[UpdateUserSkill], user_id: int, session: SessionDep, current_user: CurrentUser):
     resp = await try_patch_user_skills(user_id=user_id, session=session, current_user=current_user, new_user_skills=new_user_skills)
     return resp
+
+@router.post('/users/{user_id}/interests')
+async def patch_user_interests(new_user_interests: list[int], user_id: int, session: SessionDep, current_user: CurrentUser):
+    resp = await try_post_user_interests(user_id=user_id, session=session, current_user=current_user, new_user_interests=new_user_interests)
+    return resp
+
+# TODO: add endpoint for DELETE /users/{id}/(skills/interests)/{id}

@@ -4,8 +4,8 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.repository.auth import CurrentUser
-from app.models import User, UserPrivacySettings, UserSkill, Skill
-from app.schemas import UserShort, UpdateUser
+from app.models import User, UserPrivacySettings, UserSkill, Skill, Interest, user_interests
+from app.schemas import UserShort
 from app.exceptions import raise_user_not_found
 
 async def get_short_users(current_user: CurrentUser, session: AsyncSession, faculty: int | None = None, course: int | None = None) -> list[UserShort]:
@@ -99,3 +99,20 @@ async def patch_user_skills(patched_user_id: int, new_user_skills: list[dict], s
             await session.refresh(user_skill)
             resp.append((user_skill, cur_skill))
     return resp
+
+
+async def post_user_interests(user_id: int, new_user_interests: list[int], session: AsyncSession) -> list[Interest]:
+    resp = []
+    for interest_id in new_user_interests:
+        interest = await session.execute(select(Interest).where(Interest.id == interest_id))
+        interest = interest.scalars().one()
+        # If added interest does not even exist, program will skip this part for only one UserInterest
+        if not interest:
+            continue
+
+        new_connection = user_interests(user_id=user_id, interest_id=interest_id)
+        session.add(new_connection)
+        await session.flush()
+        await session.commit()
+        await session.refresh(new_connection)
+        resp.append(interest)

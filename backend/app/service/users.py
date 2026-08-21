@@ -128,3 +128,14 @@ async def try_patch_user_skills(user_id: int, current_user: User, session: Async
         info = UserSkillInfo(id=skill.id, name=skill.name, level=user_skill.level, experience=user_skill.level)
         output.append(info)
     return output
+
+async def try_post_user_interests(user_id: int, current_user: User, session: AsyncSession, new_user_interests: list[int]) -> list[InterestInfo]:
+    # TODO: add admin rights checking
+    if user_id != current_user.id:
+        raise_rights_exceptions()
+    # Just check user existence
+    await get_one_user(user_id=user_id, session=session)
+
+    resp = await post_user_interests(user_id=user_id, new_user_interests=new_user_interests, session=session)
+    
+
